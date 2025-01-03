@@ -1,0 +1,42 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  border: solid red 1px;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+#spacer {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  border: purple solid 1px;
+}
+
+#testCanvas {
+  width: 400px;
+}
+
+#deck {
+  height: 30%;
+}
+
+#cardInput {
+  width: 40px;
+}
+
+.card {
+  height: 100px;
+  width: 40px;
+  position: absolute;
+  display: flex;
+  background-color: cyan;
+}
