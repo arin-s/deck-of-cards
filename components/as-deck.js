@@ -1,12 +1,44 @@
 "use strict"
 
 class Deck extends HTMLElement {
+  PATH_HEIGHT = 250;
+  BENDYNESS = 5;
+  //Lowers the path by this many px
+  HEIGHT_OFFSET = 70;
+  svg;
+  path;
+  cards = [];
+
   constructor() {
     super();
 
   }
 
+  //Runs every time the element is added to the document
+  connectedCallback() {
+    this.cards = [...this.children];
+    this.insertAdjacentHTML("afterbegin",
+      `<svg id="svg">
+        <path id="path" d="" stroke="black" fill="transparent"/>
+      </svg>`);
+    this.svg = this.firstElementChild;
+    this.path = this.svg.firstElementChild;
+    this.fixPath();
+    window.addEventListener("resize", this.fixPath);
+  }
 
+  //Recreates and then sets the SVG path 
+  fixPath() {
+    //If there are no cards, do nothing
+    if(this.children.length === 0)
+      return;
+    let cardWidth = this.cards[0].offsetWidth;
+    let startX = this.svg.clientWidth / 2 - cardWidth * this.cards.length / 2;
+    let endX = this.svg.clientWidth / 2 + cardWidth * this.cards.length / 2;
+    this.path.setAttribute("d", `M ${startX} ${this.svg.clientHeight + this.HEIGHT_OFFSET} C ${startX - cardWidth * this.BENDYNESS} ${this.svg.clientHeight - this.PATH_HEIGHT + this.HEIGHT_OFFSET},
+    ${endX + cardWidth * this.BENDYNESS} ${this.svg.clientHeight - this.PATH_HEIGHT + this.HEIGHT_OFFSET}, ${endX} ${this.svg.clientHeight + this.HEIGHT_OFFSET}`);
+    //fixAllPos();
+  }
 }
 
 customElements.define("as-deck", Deck);
@@ -14,14 +46,14 @@ customElements.define("as-deck", Deck);
 
 /*
 //Declarations
-let deck = document.getElementById("deck");
+let this.svg = document.getElementById("this.svg");
 let path = document.getElementById("path");
 
 
 //Cards
 function cardManagerFactory() {
   let cards = [];
-  window.addEventListener("resize", fixPath);
+
 
   function addCard(title, img, link) {
     let card = document.createElement("div");
@@ -45,7 +77,7 @@ function cardManagerFactory() {
     let startLength = path.getTotalLength() / 2 - arcLength * (cards.length - 1) / 2;
     let targetLength = startLength + arcLength * cardIndex;
     let targetPoint = path.getPointAtLength(targetLength);
-    let deckRect = deck.getBoundingClientRect();
+    let deckRect = this.svg.getBoundingClientRect();
     card.style.top = `${deckRect.top + targetPoint.y - card.offsetHeight / 2}px`;
     card.style.left = `${deckRect.left + targetPoint.x - card.offsetWidth / 2}px`;
     //translation code
@@ -55,17 +87,7 @@ function cardManagerFactory() {
     card.style.rotate = `${radians * (180 / Math.PI)}deg`;
   }
 
-  const pathHeight = 250;
-  const BENDYNESS = 5;
-  const HEIGHT_OFFSET = 70;
-  function fixPath() {
-    let cardWidth = cards[0].offsetWidth;
-    let startX = deck.clientWidth / 2 - cardWidth * cards.length / 2;
-    let endX = deck.clientWidth / 2 + cardWidth * cards.length / 2;
-    path.setAttribute("d", `M ${startX} ${deck.clientHeight + HEIGHT_OFFSET} C ${startX - cardWidth * BENDYNESS} ${deck.clientHeight - pathHeight + HEIGHT_OFFSET},
-      ${endX + cardWidth * BENDYNESS} ${deck.clientHeight - pathHeight + HEIGHT_OFFSET}, ${endX} ${deck.clientHeight + HEIGHT_OFFSET}`);
-    fixAllPos();
-  }
+
   return { addCard, fixPath, cards };
 }
 */
