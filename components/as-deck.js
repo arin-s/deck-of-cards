@@ -27,17 +27,47 @@ class Deck extends HTMLElement {
     window.addEventListener("resize", this.fixPath);
   }
 
-  //Recreates and then sets the SVG path 
+  //Recreates and then sets the SVG path
   fixPath() {
-    //If there are no cards, do nothing
-    if(this.children.length === 0)
+    //Get child cards
+    this.cards = [...this.children].filter((elem) => elem.tagName === "AS-CARD");
+    //If there are no cards, return
+    if(this.cards.length === 0) {
+      console.warn("No cards detected within <as-deck>, intended?");
       return;
+    }
     let cardWidth = this.cards[0].offsetWidth;
     let startX = this.svg.clientWidth / 2 - cardWidth * this.cards.length / 2;
     let endX = this.svg.clientWidth / 2 + cardWidth * this.cards.length / 2;
-    this.path.setAttribute("d", `M ${startX} ${this.svg.clientHeight + this.HEIGHT_OFFSET} C ${startX - cardWidth * this.BENDYNESS} ${this.svg.clientHeight - this.PATH_HEIGHT + this.HEIGHT_OFFSET},
-    ${endX + cardWidth * this.BENDYNESS} ${this.svg.clientHeight - this.PATH_HEIGHT + this.HEIGHT_OFFSET}, ${endX} ${this.svg.clientHeight + this.HEIGHT_OFFSET}`);
+    this.path.setAttribute("d", `M ${startX} ${this.svg.clientHeight + this.HEIGHT_OFFSET} C ` +
+      `${startX - cardWidth * this.BENDYNESS} ${this.svg.clientHeight - this.PATH_HEIGHT + this.HEIGHT_OFFSET}, ` +
+      `${endX + cardWidth * this.BENDYNESS} ${this.svg.clientHeight - this.PATH_HEIGHT + this.HEIGHT_OFFSET}, ` + 
+      `${endX} ${this.svg.clientHeight + this.HEIGHT_OFFSET}`);
     //fixAllPos();
+  }
+
+  //need custom events for requesting card coords
+
+  fixAllPos() {
+    for (let card of cards)
+      fixPos(card);
+  }
+
+  SPACING_MULT = 1.3;
+  fixPos(card) {
+    let arcLength = card.offsetWidth * SPACING_MULT;
+    let cardIndex = Object.keys(cards).find(key => cards[key] === card);
+    let startLength = path.getTotalLength() / 2 - arcLength * (cards.length - 1) / 2;
+    let targetLength = startLength + arcLength * cardIndex;
+    let targetPoint = path.getPointAtLength(targetLength);
+    let deckRect = this.svg.getBoundingClientRect();
+    card.style.top = `${deckRect.top + targetPoint.y - card.offsetHeight / 2}px`;
+    card.style.left = `${deckRect.left + targetPoint.x - card.offsetWidth / 2}px`;
+    //translation code
+    let p1 = path.getPointAtLength(targetLength - card.offsetWidth / 2);
+    let p2 = path.getPointAtLength(targetLength + card.offsetWidth / 2);
+    let radians = Math.atan2(p2.y - p1.y, p2.x - p1.x);
+    card.style.rotate = `${radians * (180 / Math.PI)}deg`;
   }
 }
 
@@ -64,28 +94,10 @@ function cardManagerFactory() {
     fixPath();
   }
 
-  function fixAllPos() {
-    for (let card of cards)
-      fixPos(card);
-  }
 
 
-  const SPACING_MULT = 1.3;
-  function fixPos(card) {
-    let arcLength = card.offsetWidth * SPACING_MULT;
-    let cardIndex = Object.keys(cards).find(key => cards[key] === card);
-    let startLength = path.getTotalLength() / 2 - arcLength * (cards.length - 1) / 2;
-    let targetLength = startLength + arcLength * cardIndex;
-    let targetPoint = path.getPointAtLength(targetLength);
-    let deckRect = this.svg.getBoundingClientRect();
-    card.style.top = `${deckRect.top + targetPoint.y - card.offsetHeight / 2}px`;
-    card.style.left = `${deckRect.left + targetPoint.x - card.offsetWidth / 2}px`;
-    //translation code
-    let p1 = path.getPointAtLength(targetLength - card.offsetWidth / 2);
-    let p2 = path.getPointAtLength(targetLength + card.offsetWidth / 2);
-    let radians = Math.atan2(p2.y - p1.y, p2.x - p1.x);
-    card.style.rotate = `${radians * (180 / Math.PI)}deg`;
-  }
+
+
 
 
   return { addCard, fixPath, cards };
