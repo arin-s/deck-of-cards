@@ -27,6 +27,7 @@ class Deck extends HTMLElement {
       //this.updatePath();
     });
     document.addEventListener("readystatechange", this.onLoad.bind(this));
+    this.addEventListener("cardstatechange", this.cardStateChange);
   }
 
   //Runs every time the element is added to the document
@@ -67,7 +68,6 @@ class Deck extends HTMLElement {
 
   //Recreates and then sets the SVG path
   updatePath() {
-    console.log("sssssssssssddd");
     let card = this.slot
       .assignedElements()[0]
       .shadowRoot.querySelector(".card");
@@ -85,6 +85,10 @@ class Deck extends HTMLElement {
         }, ` +
         `${endX} ${this.svg.clientHeight + this.HEIGHT_OFFSET}`
     );
+    this.updateAllCards();
+  }
+
+  updateAllCards() {
     for (let card of this.cards) this.updateCard(card);
   }
 
@@ -101,20 +105,23 @@ class Deck extends HTMLElement {
     let targetLength = startLength + arcLength * cardIndex;
     let targetPoint = this.path.getPointAtLength(targetLength);
     let deckRect = this.svg.getBoundingClientRect();
-    top = `${
-      deckRect.top + targetPoint.y - card.offsetHeight / 2
-    }px`;
-    left = `${
-      deckRect.left + targetPoint.x - card.offsetWidth / 2
-    }px`;
+    top = `${deckRect.top + targetPoint.y - card.offsetHeight / 2}px`;
+    left = `${deckRect.left + targetPoint.x - card.offsetWidth / 2}px`;
     //translation code
     let p1 = this.path.getPointAtLength(targetLength - card.offsetWidth / 2);
     let p2 = this.path.getPointAtLength(targetLength + card.offsetWidth / 2);
     let radians = Math.atan2(p2.y - p1.y, p2.x - p1.x);
     rotate = `${radians * (180 / Math.PI)}deg`;
-    this.cards[0].dispatchEvent(
-      new CustomEvent("set-pos", { detail: {left: left, top: top, rotate: rotate}, composed: true })
+    this.cards[cardIndex].dispatchEvent(
+      new CustomEvent("set-pos", {
+        detail: { left: left, top: top, rotate: rotate },
+        composed: true,
+      })
     );
+  }
+
+  cardStateChange(event) {
+    event.detail.cardState
   }
 }
 
