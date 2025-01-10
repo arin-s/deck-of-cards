@@ -25,18 +25,10 @@ body {
   width: 400px;
 }
 
-#deck {
+as-deck {
   height: 30%;
 }
 
-#cardInput {
+as-card {
   width: 40px;
-}
-
-.card {
-  height: 100px;
-  width: 40px;
-  position: absolute;
-  display: flex;
-  background-color: cyan;
 }
