@@ -16,6 +16,7 @@ class Deck extends HTMLElement {
     this.shadowRoot = this.attachShadow({ mode: "open" });
     let template = document.createElement("template");
     template.innerHTML = `
+      <link rel="stylesheet" href="components/as-deck.css">
       <svg>
         <path d="" stroke="black" fill="transparent" />
       </svg>
@@ -32,7 +33,7 @@ class Deck extends HTMLElement {
 
   //Runs every time the element is added to the document
   connectedCallback() {
-    this.svg = this.shadowRoot.firstElementChild;
+    this.svg = this.shadowRoot.querySelector("svg");
     this.path = this.svg.firstElementChild;
     window.addEventListener("resize", this.updatePath.bind(this));
   }
