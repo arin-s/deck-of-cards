@@ -7,7 +7,6 @@ class Card extends HTMLElement {
   state = "onPath";
   downOffsetX;
   downOffsetY;
-  onPointerMoveReference;
   timeoutID;
 
   constructor() {
@@ -42,20 +41,25 @@ class Card extends HTMLElement {
       this.tryUpdatePos();
     });
     this.addEventListener("pointerdown", this.onPointerDown);
-    this.onPointerMoveReference = this.onPointerMove.bind(this);
     document.addEventListener("pointerup", this.onPointerUp.bind(this));
-    document.addEventListener("pointercancel", ()=>{console.log("cancel")});
+    document.addEventListener("pointercancel", ()=>{console.log("pointercancel")});
+    document.addEventListener("lostpointercapture", ()=>{console.log("lostpointercapture")})
+    document.addEventListener("contextmenu", (event)=>{
+    event.preventDefault();
+      console.log("contextmenu")
+    })
   }
 
   onPointerDown(event) {
     event.preventDefault();
-    if (!event.button === 0) return;
+    if (!(event.button === 0)) return;
     this.state = "dragged";
     this.downOffsetX = event.offsetX;
     this.downOffsetY = event.offsetY;
     this.setPointerCapture(event.pointerId);
-    this.addEventListener("pointermove", this.onPointerMoveReference);
+    this.onpointermove = this.onPointerMove;
     this.timeoutID = setInterval(this.dragAnimation.bind(this), 16.6);
+    console.log(`CALLED ID ${this.timeoutID}`)
   }
 
   prevX = null;
@@ -68,6 +72,7 @@ class Card extends HTMLElement {
       this.style.rotate = `${delta * 2}deg`;
     }
     this.prevX = this.currX;
+    console.log("animation");
   }
 
   //Records event.x for dragAnimation and updates card position
@@ -81,14 +86,15 @@ class Card extends HTMLElement {
   onPointerUp(event) {
     if (this.state !== "dragged") return;
     this.state = "onPath";
-    document.removeEventListener("pointermove", this.onPointerMoveReference);
-    clearTimeout(this.timeoutID);
+    this.onpointermove = null;
+    clearInterval(this.timeoutID);
     this.tryUpdatePos();
   }
 
   tryUpdatePos() {
     //Add state handling code
     if (this.state === "onPath") {
+      console.log("updatePos")
       this.style.top = this.top;
       this.style.left = this.left;
       this.style.rotate = this.rotate;

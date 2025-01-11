@@ -11,10 +11,10 @@
   --rotate-factor-y: 30deg;
   --perspective: 500px;
   touch-action: none;
+  user-select: none
 }
 
 .card-focus-field{
-  border: solid purple 1px;
   transform-style: preserve-3d;
   height: 100px;
   display: flex;
