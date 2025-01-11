@@ -10,6 +10,7 @@
   --rotate-factor-x: 30deg;
   --rotate-factor-y: 30deg;
   --perspective: 500px;
+  touch-action: none;
 }
 
 .card-focus-field{

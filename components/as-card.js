@@ -7,7 +7,7 @@ class Card extends HTMLElement {
   state = "onPath";
   downOffsetX;
   downOffsetY;
-  onMouseMoveReference;
+  onPointerMoveReference;
   timeoutID;
 
   constructor() {
@@ -41,25 +41,26 @@ class Card extends HTMLElement {
       this.rotate = event.detail.rotate;
       this.tryUpdatePos();
     });
-    this.addEventListener("mousedown", this.onMouseDown);
-    this.onMouseMoveReference = this.onMouseMove.bind(this);
-    document.addEventListener("mouseup", this.onMouseUp.bind(this));
+    this.addEventListener("pointerdown", this.onPointerDown);
+    this.onPointerMoveReference = this.onPointerMove.bind(this);
+    document.addEventListener("pointerup", this.onPointerUp.bind(this));
+    document.addEventListener("pointercancel", ()=>{console.log("cancel")});
   }
 
-  onMouseDown(event) {
+  onPointerDown(event) {
     event.preventDefault();
     if (!event.button === 0) return;
     this.state = "dragged";
     this.downOffsetX = event.offsetX;
     this.downOffsetY = event.offsetY;
-    document.addEventListener("mousemove", this.onMouseMoveReference);
+    this.setPointerCapture(event.pointerId);
+    this.addEventListener("pointermove", this.onPointerMoveReference);
     this.timeoutID = setInterval(this.dragAnimation.bind(this), 16.6);
   }
 
   prevX = null;
-  //Calculates mouse velocity and updates card rotation
+  //Calculates pointer velocity and updates card rotation
   dragAnimation() {
-    console.log("Dddddddd")
     if (this.prevX === null) {
       this.style.rotate = "0deg";
     } else {
@@ -71,16 +72,16 @@ class Card extends HTMLElement {
 
   //Records event.x for dragAnimation and updates card position
 
-  onMouseMove(event) {
+  onPointerMove(event) {
     this.style.top = `${event.y - this.downOffsetY}px`;
     this.style.left = `${event.x - this.downOffsetX}px`;
     this.currX = event.x;
   }
 
-  onMouseUp(event) {
+  onPointerUp(event) {
     if (this.state !== "dragged") return;
     this.state = "onPath";
-    document.removeEventListener("mousemove", this.onMouseMoveReference);
+    document.removeEventListener("pointermove", this.onPointerMoveReference);
     clearTimeout(this.timeoutID);
     this.tryUpdatePos();
   }
