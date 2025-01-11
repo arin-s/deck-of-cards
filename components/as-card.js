@@ -8,7 +8,7 @@ class Card extends HTMLElement {
   downOffsetX;
   downOffsetY;
   onMouseMoveReference;
-
+  timeoutID;
 
   constructor() {
     super();
@@ -47,31 +47,41 @@ class Card extends HTMLElement {
   }
 
   onMouseDown(event) {
-    if(!event.button === 0)
-      return;
+    event.preventDefault();
+    if (!event.button === 0) return;
     this.state = "dragged";
     this.downOffsetX = event.offsetX;
     this.downOffsetY = event.offsetY;
     document.addEventListener("mousemove", this.onMouseMoveReference);
-    
+    this.timeoutID = setInterval(this.dragAnimation.bind(this), 16.6);
   }
 
   prevX = null;
+  //Calculates mouse velocity and updates card rotation
+  dragAnimation() {
+    console.log("Dddddddd")
+    if (this.prevX === null) {
+      this.style.rotate = "0deg";
+    } else {
+      let delta =  this.currX - this.prevX;
+      this.style.rotate = `${delta * 2}deg`;
+    }
+    this.prevX = this.currX;
+  }
+
+  //Records event.x for dragAnimation and updates card position
+
   onMouseMove(event) {
     this.style.top = `${event.y - this.downOffsetY}px`;
     this.style.left = `${event.x - this.downOffsetX}px`;
-    this.style.rotate = "0deg";
-    if(this.prevX !== null) {
-      this.rotate = 0;
-    }
-
+    this.currX = event.x;
   }
 
   onMouseUp(event) {
-    if(this.state !== "dragged")
-      return;
+    if (this.state !== "dragged") return;
     this.state = "onPath";
     document.removeEventListener("mousemove", this.onMouseMoveReference);
+    clearTimeout(this.timeoutID);
     this.tryUpdatePos();
   }
 

@@ -12,22 +12,16 @@
   --perspective: 500px;
 }
 
-html, body {
-  height: 100%;
-}
-
 .card-focus-field{
   border: solid purple 1px;
   transform-style: preserve-3d;
   height: 100px;
-  width: 40px;
   display: flex;
   
 }
 
 .card {
-  border: solid red 1px;
-  width: 40px;
+  border: solid black 1px;
   height: 100px;
 }
 
@@ -35,6 +29,7 @@ html, body {
   animation: wobbleX 2s ease-in-out infinite alternate;
   transform-style: preserve-3d;
   perspective: var(--perspective);
+  width: 100%;
 }
 
 .rotate-y {
@@ -58,4 +53,9 @@ html, body {
   100% {
     transform: rotateY(var(--rotate-factor-y));
   }
+}
+
+@keyframes flyToPos {
+  from {}
+  to {}
 }

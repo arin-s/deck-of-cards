@@ -19,6 +19,8 @@ body {
   flex-grow: 1;
   flex-direction: column;
   border: purple solid 1px;
+  justify-content: center;
+  align-items: center;
 }
 
 #testCanvas {
@@ -30,5 +32,9 @@ as-deck {
 }
 
 as-card {
-  width: 40px;
+  width: 60px;
+}
+
+#cardInput {
+  width: 50px;
 }
