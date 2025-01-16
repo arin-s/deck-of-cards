@@ -78,13 +78,11 @@ class Deck extends HTMLElement {
     this.path.setAttribute(
       "d",
       `M ${startX} ${this.svg.clientHeight + this.HEIGHT_OFFSET} C ` +
-        `${startX - cardWidth * this.BENDYNESS} ${
-          this.svg.clientHeight - this.PATH_HEIGHT + this.HEIGHT_OFFSET
-        }, ` +
-        `${endX + cardWidth * this.BENDYNESS} ${
-          this.svg.clientHeight - this.PATH_HEIGHT + this.HEIGHT_OFFSET
-        }, ` +
-        `${endX} ${this.svg.clientHeight + this.HEIGHT_OFFSET}`
+      `${startX - cardWidth * this.BENDYNESS} ${this.svg.clientHeight - this.PATH_HEIGHT + this.HEIGHT_OFFSET
+      }, ` +
+      `${endX + cardWidth * this.BENDYNESS} ${this.svg.clientHeight - this.PATH_HEIGHT + this.HEIGHT_OFFSET
+      }, ` +
+      `${endX} ${this.svg.clientHeight + this.HEIGHT_OFFSET}`
     );
     this.updateAllCards();
   }
