@@ -1,10 +1,9 @@
-"use strict"
+'use strict';
 /*
 
 //Declarations
 let deck = document.getElementById("deck");
 let path = document.getElementById("path");
-
 
 //input element stuff
 let cardInput = document.getElementById("cardInput");
