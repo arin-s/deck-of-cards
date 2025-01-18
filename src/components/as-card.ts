@@ -1,18 +1,18 @@
-'use strict';
+"use strict";
 class Card extends HTMLElement {
-  shadowRoot = 'sd';
+  shadowRoot = "sd";
   top;
   left;
   rotate;
-  state = 'onPath';
+  state = "onPath";
   downOffsetX;
   downOffsetY;
   timeoutID;
 
-  constructor () {
+  constructor() {
     super();
-    this.shadowRoot = this.attachShadow({ mode: 'open' });
-    const template = document.createElement('template');
+    this.shadowRoot = this.attachShadow({ mode: "open" });
+    const template = document.createElement("template");
     template.innerHTML = `
       <link rel="stylesheet" href="components/as-card.css">
       <div class="card-focus-field">
@@ -24,36 +24,40 @@ class Card extends HTMLElement {
       </div>
     `;
     this.shadowRoot.appendChild(template.content.cloneNode(true));
-    this.addEventListener('get-width', () => {
-      const width = this.shadowRoot.querySelector('.card').clientWidth;
+    this.addEventListener("get-width", () => {
+      const width = this.shadowRoot.querySelector(".card").clientWidth;
       this.dispatchEvent(
-        new CustomEvent('send-width', {
+        new CustomEvent("send-width", {
           composed: true,
           bubbles: true,
           detail: { width },
-        })
+        }),
       );
     });
-    this.addEventListener('set-pos', (event) => {
+    this.addEventListener("set-pos", (event) => {
       this.top = event.detail.top;
       this.left = event.detail.left;
       this.rotate = event.detail.rotate;
       this.tryUpdatePos();
     });
-    this.addEventListener('pointerdown', this.onPointerDown);
-    document.addEventListener('pointerup', this.onPointerUp.bind(this));
-    document.addEventListener('pointercancel', () => { console.log('pointercancel'); });
-    document.addEventListener('lostpointercapture', () => { console.log('lostpointercapture'); });
-    document.addEventListener('contextmenu', (event) => {
+    this.addEventListener("pointerdown", this.onPointerDown);
+    document.addEventListener("pointerup", this.onPointerUp.bind(this));
+    document.addEventListener("pointercancel", () => {
+      console.log("pointercancel");
+    });
+    document.addEventListener("lostpointercapture", () => {
+      console.log("lostpointercapture");
+    });
+    document.addEventListener("contextmenu", (event) => {
       event.preventDefault();
-      console.log('contextmenu');
+      console.log("contextmenu");
     });
   }
 
-  onPointerDown (event) {
+  onPointerDown(event) {
     event.preventDefault();
     if (!(event.button === 0)) return;
-    this.state = 'dragged';
+    this.state = "dragged";
     this.downOffsetX = event.offsetX;
     this.downOffsetY = event.offsetY;
     this.setPointerCapture(event.pointerId);
@@ -64,45 +68,45 @@ class Card extends HTMLElement {
 
   prevX = null;
   // Calculates pointer velocity and updates card rotation
-  dragAnimation () {
+  dragAnimation() {
     if (this.prevX === null) {
-      this.style.rotate = '0deg';
+      this.style.rotate = "0deg";
     } else {
       const delta = this.currX - this.prevX;
       this.style.rotate = `${delta * 2}deg`;
     }
     this.prevX = this.currX;
-    console.log('animation');
+    console.log("animation");
   }
 
   // Records event.x for dragAnimation and updates card position
 
-  onPointerMove (event) {
+  onPointerMove(event) {
     this.style.top = `${event.y - this.downOffsetY}px`;
     this.style.left = `${event.x - this.downOffsetX}px`;
     this.currX = event.x;
   }
 
-  onPointerUp (event) {
-    if (this.state !== 'dragged') return;
-    this.state = 'onPath';
+  onPointerUp(event) {
+    if (this.state !== "dragged") return;
+    this.state = "onPath";
     this.onpointermove = null;
     clearInterval(this.timeoutID);
     this.tryUpdatePos();
   }
 
-  tryUpdatePos () {
+  tryUpdatePos() {
     // Add state handling code
-    if (this.state === 'onPath') {
-      console.log('updatePos');
+    if (this.state === "onPath") {
+      console.log("updatePos");
       this.style.top = this.top;
       this.style.left = this.left;
       this.style.rotate = this.rotate;
     }
-    if (this.state === 'dragged') {
+    if (this.state === "dragged") {
       // ignore
     }
   }
 }
 
-customElements.define('as-card', Card);
+customElements.define("as-card", Card);

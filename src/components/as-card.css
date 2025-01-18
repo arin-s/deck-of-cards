@@ -11,14 +11,13 @@
   --rotate-factor-y: 30deg;
   --perspective: 500px;
   touch-action: none;
-  user-select: none
+  user-select: none;
 }
 
-.card-focus-field{
+.card-focus-field {
   transform-style: preserve-3d;
   height: 100px;
   display: flex;
-  
 }
 
 .card {
@@ -57,6 +56,8 @@
 }
 
 @keyframes flyToPos {
-  from {}
-  to {}
+  from {
+  }
+  to {
+  }
 }

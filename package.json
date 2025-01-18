@@ -4,15 +4,21 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "lint": "eslint --fix && prettier --write .",
+    "predev": "run-s lint",
+    "dev": "tsc && vite",
+    "prebuild": "run-s lint",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
   "devDependencies": {
     "@eslint/js": "^9.18.0",
     "eslint": "^9.18.0",
+    "eslint-config-prettier": "^10.0.1",
     "globals": "^15.14.0",
     "jiti": "^2.4.2",
+    "npm-run-all": "^4.1.5",
+    "prettier": "3.4.2",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.20.0",
     "vite": "^6.0.5"

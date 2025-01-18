@@ -1,27 +1,25 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Deck of cards</title>
+    <link rel="stylesheet" href="style.css" />
+    <script defer src="script.js"></script>
+    <script defer src="components/as-deck.js"></script>
+    <script defer src="components/as-card.js"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Deck of cards</title>
-  <link rel="stylesheet" href="style.css">
-  <script defer src="script.js"></script>
-  <script defer src="components/as-deck.js"></script>
-  <script defer src="components/as-card.js"></script>
-</head>
-
-<body>
-  <div id="spacer">
-    <input id="cardInput" type="number" value="0" min="0">
-  </div>
-  <as-deck>
-    <!-- Starting cards -->
-    <as-card>AIR</as-card>
-    <as-card>EARTH</as-card>
-    <as-card>WATER</as-card>
-    <as-card>FIRE</as-card>
-  </as-deck>
-</body>
-
+  <body>
+    <div id="spacer">
+      <input id="cardInput" type="number" value="0" min="0" />
+    </div>
+    <as-deck>
+      <!-- Starting cards -->
+      <as-card>AIR</as-card>
+      <as-card>EARTH</as-card>
+      <as-card>WATER</as-card>
+      <as-card>FIRE</as-card>
+    </as-deck>
+  </body>
 </html>
