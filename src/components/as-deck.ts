@@ -120,8 +120,8 @@ class Deck extends HTMLElement {
     const targetLength = startLength + arcLength * index;
     const targetPoint = this.path.getPointAtLength(targetLength);
     const deckRect = this.svg.getBoundingClientRect();
-    const top = `${(deckRect.top + targetPoint.y - card.offsetHeight / 2).toString()}px`;
-    const left = `${(deckRect.left + targetPoint.x - card.offsetWidth / 2).toString()}px`;
+    const top = deckRect.top + targetPoint.y - card.offsetHeight / 2;
+    const left = deckRect.left + targetPoint.x - card.offsetWidth / 2;
     // translation code
     const p1 = this.path.getPointAtLength(targetLength - card.offsetWidth / 2);
     const p2 = this.path.getPointAtLength(targetLength + card.offsetWidth / 2);

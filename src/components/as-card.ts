@@ -2,8 +2,8 @@
 
 class Card extends HTMLElement {
   shadowRoot: ShadowRoot;
-  top: string = "";
-  left: string = "";
+  top: number | null = null;
+  left: number | null = null;
   rotate: string = "";
   state: "inDeck" | "drag" | "inSocket" = "inDeck";
   downOffsetX: number = 0;
@@ -40,12 +40,12 @@ class Card extends HTMLElement {
       );
     });
     this.addEventListener("set-pos", ((
-      event: CustomEvent<{ top: string; left: string; rotate: string }>,
+      event: CustomEvent<{ top: number; left: number; rotate: string }>,
     ) => {
       this.top = event.detail.top;
       this.left = event.detail.left;
       this.rotate = event.detail.rotate;
-      this.tryUpdatePos();
+      if (this.state === "inDeck") this.setPos(this.top, this.left);
     }) as EventListener);
     this.addEventListener("pointerdown", this.onPointerDown.bind(this));
     document.addEventListener("pointerup", this.onPointerUp.bind(this));
@@ -70,7 +70,7 @@ class Card extends HTMLElement {
     this.downOffsetY = event.offsetY;
     this.setPointerCapture(event.pointerId);
     this.onpointermove = this.onPointerMove.bind(this);
-    this.setPos(event.y - this.downOffsetY, event.x - this.downOffsetX);
+    this.setPos(event.y - this.downOffsetY, event.x - this.downOffsetX, true);
     this.prevX = null;
     this.currX = null;
     this.dragAnimation();
@@ -98,28 +98,23 @@ class Card extends HTMLElement {
 
   onPointerUp() {
     if (this.state !== "drag") return;
+    if (this.top === null || this.left === null)
+      throw new Error("Card coordinates are null!");
     this.state = "inDeck";
     this.onpointermove = null;
     clearInterval(this.timeoutID);
-    this.tryUpdatePos();
+    this.setPos(this.top, this.left);
   }
 
-  tryUpdatePos() {
-    // Add state handling code
-    if (this.state === "inDeck") {
-      console.log("updatePos");
-      this.style.top = this.top;
-      this.style.left = this.left;
-      this.style.rotate = this.rotate;
+  setPos(top: number, left: number, instant: boolean = false) {
+    if (instant) {
+      this.style.top = `${top.toString()}px`;
+      this.style.left = `${left.toString()}px`;
+    } else {
+      //do slow anim
+      this.style.top = `${top.toString()}px`;
+      this.style.left = `${left.toString()}px`;
     }
-    if (this.state === "drag") {
-      // ignore
-    }
-  }
-
-  setPos(top: number, left: number) {
-    this.style.top = `${top.toString()}px`;
-    this.style.left = `${left.toString()}px`;
   }
 }
 
