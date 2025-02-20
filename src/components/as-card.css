@@ -5,6 +5,7 @@
 }
 
 :host {
+  box-shadow: 10px 5px 5px red;
   position: absolute;
   --skew-factor: 1.5deg;
   --rotate-factor-x: 30deg;

@@ -17,7 +17,7 @@ export default [
     },
   },
   {
-    ignores: ["tmp/*", "eslint.config.ts"],
+    ignores: ["tmp/*", "dist/*", "eslint.config.ts", "vite.config.js"],
   },
   eslintConfigPrettier,
 ];
