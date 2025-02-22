@@ -1,7 +1,6 @@
-module.exports = {
-  root: 'src',
+export default {
   build: {
-    outDir: '../dist',
-    emptyOutDir: true, 
-  }
-}
+    base: "dist/",
+    target: "ES2020",
+  },
+};

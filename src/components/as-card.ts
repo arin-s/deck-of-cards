@@ -1,5 +1,7 @@
 "use strict";
 
+import css from "./as-card.css?url";
+
 class Card extends HTMLElement {
   shadowRoot: ShadowRoot;
   top: number | null = null;
@@ -17,7 +19,7 @@ class Card extends HTMLElement {
     this.shadowRoot = this.attachShadow({ mode: "open" });
     const template = document.createElement("template");
     template.innerHTML = `
-      <link rel="stylesheet" href="src/components/as-card.css">
+      <link rel="stylesheet" href="${css}">
       <div class="card-focus-field">
         <div class="rotate-x">
           <div class="rotate-y card">

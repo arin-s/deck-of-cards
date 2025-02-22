@@ -1,5 +1,7 @@
 "use strict";
 
+import css from "./as-deck.css?url";
+
 class Deck extends HTMLElement {
   PATH_HEIGHT = 250;
   BENDYNESS = 5;
@@ -16,8 +18,9 @@ class Deck extends HTMLElement {
     super();
     this.shadowRoot = this.attachShadow({ mode: "open" });
     const template = document.createElement("template");
+    console.log(css);
     template.innerHTML = `
-      <link rel="stylesheet" href="src/components/as-deck.css">
+      <link rel="stylesheet" href="${css}">
       <svg>
         <path d="" stroke="black" fill="transparent" />
       </svg>
